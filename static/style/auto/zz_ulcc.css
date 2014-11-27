@@ -1,0 +1,11 @@
+/* make default content area wider */
+.ep_tm_page_content
+{
+	width: 870px;
+}
+
+/* border around content area to aid branding discussions */
+.ep_tm_page_content
+{
+	border: 5px dashed #ccc;
+}
