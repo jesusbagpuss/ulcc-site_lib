@@ -78,6 +78,8 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
 
     <component><field ref="divisions" /></component>
 
+    <component><field ref="dates" /></component>
+
     <component type="Field::Multi">
       <title>Publication Details</title>
       <epc:if test="type != 'patent' ">
@@ -90,8 +92,6 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
       </epc:if>
 
       <epc:if test='type = "patent"'>
-        <field ref="date" required="yes" />
-        <field ref="date_type" required="yes" />
         <field ref="official_url"/>
         <field ref="patent_applicant" required="yes" />
         <field ref="id_number" required="yes" />
@@ -104,13 +104,9 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
         <field ref="publisher" required="yes" />
         <field ref="id_number"/>
         <field ref="pages"/>
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'book'">
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="place_of_pub"/>
         <field ref="publisher" required="yes" />
         <field ref="pages"/>
@@ -121,8 +117,6 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'other'">
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
         <field ref="place_of_pub"/>
         <field ref="publisher" required="yes" />
@@ -139,21 +133,15 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
         <field ref="series"/>
         <field ref="number"/>
         <field ref="isbn"/>
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'thesis'">
-        <field ref="date" required="yes" />
-        <field ref="date_type" required="yes" />
         <field ref="official_url"/>
         <field ref="institution" required="yes" />
         <field ref="department" required="yes" />
         <field ref="pages"/>
       </epc:if>
       <epc:if test="type = 'conference_item'">
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="pagerange"/>
         <field ref="official_url"/>
       </epc:if>
@@ -165,75 +153,53 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
         <field ref="volume"/>
         <field ref="number"/>
         <field ref="pagerange"/>
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="id_number"/>
       </epc:if>
       <epc:if test="type = 'artefact'">
         <field ref="output_media"/>
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'exhibition'">
         <field ref="output_media"/>
         <field ref="isbn"/>
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'composition'">
         <field ref="output_media"/>
         <field ref="publisher" />
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'performance'">
         <field ref="output_media"/>
         <field ref="publisher" />
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'image'">
         <field ref="output_media"/>
         <field ref="publisher" />
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'video'">
         <field ref="output_media"/>
         <field ref="publisher" />
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'audio'">
         <field ref="output_media"/>
         <field ref="publisher" />
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'dataset'">
         <field ref="output_media"/>
         <field ref="publisher"/>
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'experiment'">
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <epc:if test="type = 'teaching_resource'">
         <field ref="copyright_holders"/>
         <field ref="publisher"/>
-        <field ref="date"/>
-        <field ref="date_type"/>
         <field ref="official_url"/>
       </epc:if>
       <field ref="related_url" />
