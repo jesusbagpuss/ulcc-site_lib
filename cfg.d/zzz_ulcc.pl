@@ -12,3 +12,13 @@ push @{ $c->{fields}->{user} },
 	type => "id"
 }
 ;
+
+# never timeout browse view cache
+for( @{ $c->{browse_views} } )
+{
+    $_->{max_menu_age} = 9**9**9; # inf
+    $_->{max_list_age} = 9**9**9; # inf
+}
+
+# smtp server runs on localhost
+$c->{smtp_server} = 'localhost';
