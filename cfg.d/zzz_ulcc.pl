@@ -19,3 +19,11 @@ for( @{ $c->{browse_views} } )
     $_->{max_menu_age} = 9**9**9; # inf
     $_->{max_list_age} = 9**9**9; # inf
 }
+
+# always include archive ID in log messages
+$c->{log} = sub
+{
+	my( $repository, $message ) = @_;
+
+	print STDERR "[".$repository->get_id()."] ".$message."\n";
+};
