@@ -27,3 +27,8 @@ $c->{log} = sub
 
 	print STDERR "[".$repository->get_id()."] ".$message."\n";
 };
+
+# disable multiple confusing feed options
+$c->{plugins}->{"Export::RSS"}->{params}->{disable} = 1;
+$c->{plugins}->{"Export::Atom"}->{params}->{disable} = 1;
+$c->{plugins}->{"Export::RSS2"}->{params}->{name} = "RSS";
