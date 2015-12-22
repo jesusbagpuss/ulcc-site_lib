@@ -11,6 +11,10 @@ push @{ $c->{fields}->{user} },
 	name => "staffid",
 	type => "id"
 }
+{
+	name => "orcid",
+	type => "id"
+}
 ;
 
 # never timeout browse view cache
