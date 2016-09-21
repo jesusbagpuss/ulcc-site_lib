@@ -34,5 +34,8 @@ $c->{log} = sub
 
 # disable multiple confusing feed options
 $c->{plugins}->{"Export::RSS"}->{params}->{disable} = 1;
-$c->{plugins}->{"Export::Atom"}->{params}->{disable} = 1;
 $c->{plugins}->{"Export::RSS2"}->{params}->{name} = "RSS";
+
+# AH 21/09/2016: re-enabling Export::Atom plugin as SWORD intergration and
+# CRUD.pm require it
+# $c->{plugins}->{"Export::Atom"}->{params}->{disable} = 1;
