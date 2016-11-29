@@ -5,14 +5,24 @@ $c->{plugins}->{"Screen::Register"}->{actions}->{register}->{appears}->{key_tool
 # removing the default order makes simple search revert to 'by relevance'
 $c->{search}->{simple}->{default_order} = undef;
 
+#Need to start check for orcid as everyone is trying to add it  these days ;)
+my $orcid_present = 0;
+for(@{$c->{fields}->{user}}){
+	$orcid_present = 1 if( $_->{name} eq "orcid" );
+}
+if( !$orcid_present ){
+    push @{ $c->{fields}->{user} },
+    {
+        name => "orcid",
+        type => "id"
+    };
+}
+
+
 # add generic staffid field to user dataset
 push @{ $c->{fields}->{user} },
 {
 	name => "staffid",
-	type => "id"
-},
-{
-	name => "orcid",
 	type => "id"
 }
 ;
