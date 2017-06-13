@@ -49,3 +49,36 @@ $c->{plugins}->{"Export::RSS2"}->{params}->{name} = "RSS";
 # AH 21/09/2016: re-enabling Export::Atom plugin as SWORD intergration and
 # CRUD.pm require it
 # $c->{plugins}->{"Export::Atom"}->{params}->{disable} = 1;
+
+#Fix ordering for creators_name
+#Sticking familyname and given name together ordering as if a single string results in nonsense eg:
+
+#Lamb, C. (1)
+#Lambert, Jodie (1)
+#Lambie, John (1)
+#Lamb, Tracey J. (1)
+#
+#which should be 
+#
+#Lamb, C. (1)
+#Lamb, Tracey J. (1)
+#Lambert, Jodie (1)
+#Lambie, John (1)
+
+#Using this function to order fixes this problem
+$c->{name_orderval} = sub
+{
+    my ($field, $value, $dataset) = @_;
+    return $value->{family} . '$$$$$' . $value->{given};
+};
+
+for my $field (@{$c->{fields}->{eprint}}){
+    if($field->{name} eq "creators"){ #TODO extend to other fields with names eg editors, contributors?
+        for my $sub (@{$field->{fields}}){
+            if($sub->{sub_name} eq "name"){
+                $sub->{make_single_value_orderkey} = 'name_orderval';
+            }
+        }
+    }
+}
+
