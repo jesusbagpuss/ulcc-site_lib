@@ -82,3 +82,123 @@ for my $field (@{$c->{fields}->{eprint}}){
     }
 }
 
+#The default validate_field does not check that an int is an int.
+#Only worth using if sql_mode is not strict (see below)
+
+$c->{validate_field} = sub
+{
+	my( $field, $value, $repository, $for_archive ) = @_;
+
+	my $xml = $repository->xml();
+
+	# only apply checks if the value is set
+	return () if !EPrints::Utils::is_set( $value );
+
+	my @problems = ();
+
+	# CHECKS IN HERE
+
+	my $values = ref($value) eq "ARRAY" ? $value : [$value];
+
+	# closure for generating the field link fragment
+	my $f_fieldname = sub {
+		my $f = defined $field->property( "parent" ) ? $field->property( "parent" ) : $field;
+		my $fieldname = $xml->create_element( "span", class=>"ep_problem_field:".$f->get_name );
+		$fieldname->appendChild( $f->render_name( $repository ) );
+		return $fieldname;
+	};
+	
+    # Loop over actual individual values to check URLs, names and emails
+	foreach my $v (@$values)
+	{
+		next unless EPrints::Utils::is_set( $v );
+
+		if( $field->isa( "EPrints::MetaField::Url" ) )
+		{
+			# Valid URI check (very loose)
+			if( $v !~ /^\w+:/ )
+			{
+				push @problems,
+					$repository->html_phrase( "validate:missing_http",
+						fieldname=>&$f_fieldname );
+			}
+		}
+		elsif( $field->isa( "EPrints::MetaField::Name" ) )
+		{
+			# Check a name has a family part
+			if( !EPrints::Utils::is_set( $v->{family} ) )
+			{
+				push @problems,
+					$repository->html_phrase( "validate:missing_family",
+						fieldname=>&$f_fieldname );
+			}
+			# Check a name has a given part
+			elsif( !EPrints::Utils::is_set( $v->{given} ) )
+			{
+				push @problems,
+					$repository->html_phrase( "validate:missing_given",
+						fieldname=>&$f_fieldname );
+			}
+		}
+		elsif( $field->isa( "EPrints::MetaField::Email" ) )
+		{
+			# Check an email looks "ok". Just checks it has only one "@" and no
+			# spaces.
+			if( $v !~ /^[^ \@]+\@[^ \@]+$/ )
+			{
+				push @problems,
+					$repository->html_phrase( "validate:bad_email",
+						fieldname=>&$f_fieldname );
+			}
+		}elsif( $field->isa( "EPrints::MetaField::Int" ) )
+		{
+			# Valid Int (Will warn if value is not an int, if DB not strict it will truncate and set, but nice to let people know)
+			if( $v !~ /^\d+$/ )
+			{
+				push @problems,
+					$repository->html_phrase( "validate:not_an_integer",
+						fieldname=>&$f_fieldname );
+			}
+		}
+
+
+		# Check for overly long values
+		# Applies to all subclasses of Id: Text, Longtext, Url etc.
+		if( $field->isa( "EPrints::MetaField::Id" ) )
+		{
+			if( length($v) > $field->property( "maxlength" ) )
+			{
+				push @problems,
+					$repository->html_phrase( "validate:truncated",
+						fieldname=>&$f_fieldname );
+			}
+		}
+	}
+
+	return( @problems );
+};
+
+# If SQL mode is strict then we need to check the int before it get's anywhere near the database
+# This will truncate the non-int down to as much int as it can and set the value
+# This in turn will make any validation (see above) obsolete so probably some js validation should go with this
+
+{
+
+    package EPrints::MetaField::Int;
+
+    sub set_value
+    {
+        my( $self, $object, $value ) = @_;
+        
+        if(defined $value && $value !~ /^\d+$/){
+            my $ov = $value;
+            #Will take any numbers we can from the start of value (this is what Mysql does when not in strict mode)
+            $value =~ s/^(\d+).*$/$1/;
+            # FFS... $self doesn't have session
+            #$self->{session}->get_repository->log("MetaField::".$self->get_type." - Trunating value as Non integer found ($ov => $value) ");
+            print STDERR "MetaField::".$self->get_type." - Truncating value as Non integer found ($ov => $value) \n";
+        }
+        return $self->SUPER::set_value($object, $value);
+
+    }
+}
