@@ -190,6 +190,14 @@ $c->{validate_field} = sub
     {
         my( $self, $object, $value ) = @_;
         
+        #Don't do this if it is a float....
+        if($self->get_type =~ /float/){
+            return $self->SUPER::set_value($object, $value);
+        }
+        # Or an array or arrayref (multiplr field)
+        if(ref($value) =~ /ARRAY/){
+            return $self->SUPER::set_value($object, $value);
+        }
         if(defined $value && $value !~ /^\d+$/){
             my $ov = $value;
             #Will take any numbers we can from the start of value (this is what Mysql does when not in strict mode)
@@ -199,6 +207,5 @@ $c->{validate_field} = sub
             print STDERR "MetaField::".$self->get_type." - Truncating value as Non integer found ($ov => $value) \n";
         }
         return $self->SUPER::set_value($object, $value);
-
     }
 }
