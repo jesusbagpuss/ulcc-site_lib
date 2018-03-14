@@ -150,7 +150,21 @@ $c->{validate_field} = sub
 					$repository->html_phrase( "validate:bad_email",
 						fieldname=>&$f_fieldname );
 			}
-		}elsif( $field->isa( "EPrints::MetaField::Int" ) )
+		}
+		elsif( $field->isa( "EPrints::MetaField::Float" ) )
+		{
+			# Valid Float (Will warn if value is not a float, if DB not strict it will set, but nice to let people know)
+            #   accept positive and negative value (+|-)
+            #   match digits
+            #   optionally match a decimal point followed bydigits
+			if( $v !~ /[+-]?([0-9]*?[.])?[0-9]+$/ )
+			{
+				push @problems,
+					$repository->html_phrase( "validate:not_a_float",
+						fieldname=>&$f_fieldname );
+			}
+		}
+		elsif( $field->isa( "EPrints::MetaField::Int" ) )
 		{
 			# Valid Int (Will warn if value is not an int, if DB not strict it will truncate and set, but nice to let people know)
 			if( $v !~ /^\d+$/ )
