@@ -85,17 +85,16 @@ $c->{name_orderval} = sub
 };
 
 for my $field (@{$c->{fields}->{eprint}}){
-    if($field->{name} eq "creators"){ #TODO extend to other fields with names eg editors, contributors?
+    if(grep $field->{name} eq $_, [qw/creators editors contributors/]){
         for my $sub (@{$field->{fields}}){
+            #sort out ordervals
             if($sub->{sub_name} eq "name"){
                 $sub->{make_single_value_orderkey} = 'name_orderval';
             }
-        }
-    }
-    #don't eport possible emails
-    if(grep $field->{name} eq $_, [qw/creators editors contributors/]){ #TODO extend to other fields with names eg editors, contributors?
-        if($sub->{sub_name} eq "id"){
-            $sub->{export_as_xml} = 0;
+            #don't eport possible emails
+            if($sub->{sub_name} eq "id"){
+                $sub->{export_as_xml} = 0;
+            }
         }
     }
 }
