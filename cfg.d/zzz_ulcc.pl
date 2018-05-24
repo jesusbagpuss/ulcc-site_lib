@@ -56,11 +56,11 @@ $c->{plugins}->{"Export::RSS2"}->{params}->{name} = "RSS";
 $c->{plugins}->{"Export::JSON"}->{params}->{visible} = "staff";
 
 # and api endoints
-my $safe_roles = [];
-for my $role (@{$c->{public_roles}}){
-    push @{$safe_roles}, $role unless($role eq "+eprint/archive/rest/get");
-}
-$c->{public_roles} = $safe_roles;
+#my $safe_roles = [];
+#for my $role (@{$c->{public_roles}}){
+#    push @{$safe_roles}, $role unless($role eq "+eprint/archive/rest/get");
+#}
+#$c->{public_roles} = $safe_roles;
 
 #Fix ordering for creators_name
 #Sticking familyname and given name together ordering as if a single string results in nonsense eg:
