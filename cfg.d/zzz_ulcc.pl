@@ -50,6 +50,18 @@ $c->{plugins}->{"Export::RSS2"}->{params}->{name} = "RSS";
 # CRUD.pm require it
 # $c->{plugins}->{"Export::Atom"}->{params}->{disable} = 1;
 
+# Stop eprints from publicly displaying personal information in exports 
+
+#JSON export does not respect export_as_xml for sub fields so set to staff until such ime that this is remedied
+$c->{plugins}->{"Export::JSON"}->{params}->{visible} = "staff";
+
+# and api endoints
+my $safe_roles = [];
+for my $role (@{$c->{public_roles}}){
+    push @{$safe_roles}, $role unless($role eq "+eprint/archive/rest/get");
+}
+$c->{public_roles} = $safe_roles;
+
 #Fix ordering for creators_name
 #Sticking familyname and given name together ordering as if a single string results in nonsense eg:
 
@@ -78,6 +90,12 @@ for my $field (@{$c->{fields}->{eprint}}){
             if($sub->{sub_name} eq "name"){
                 $sub->{make_single_value_orderkey} = 'name_orderval';
             }
+        }
+    }
+    #don't eport possible emails
+    if(grep $field->{name} eq $_, [qw/creators editors contributors/]){ #TODO extend to other fields with names eg editors, contributors?
+        if($sub->{sub_name} eq "id"){
+            $sub->{export_as_xml} = 0;
         }
     }
 }
