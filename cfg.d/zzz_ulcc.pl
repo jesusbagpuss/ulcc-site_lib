@@ -52,15 +52,6 @@ $c->{plugins}->{"Export::RSS2"}->{params}->{name} = "RSS";
 
 # Stop eprints from publicly displaying personal information in exports 
 
-#JSON export does not respect export_as_xml for sub fields so set to staff until such ime that this is remedied
-$c->{plugins}->{"Export::JSON"}->{params}->{visible} = "staff";
-
-# and api endoints
-#my $safe_roles = [];
-#for my $role (@{$c->{public_roles}}){
-#    push @{$safe_roles}, $role unless($role eq "+eprint/archive/rest/get");
-#}
-#$c->{public_roles} = $safe_roles;
 push @{ $c->{fields}->{eprint} },  { name=>"contact_email", type=>"email", required=>0, can_clone=>0, export_as_xml=>0, replace_core=>1 };
 
 #Fix ordering for creators_name
