@@ -86,7 +86,7 @@ $c->{name_orderval} = sub
 };
 
 for my $field (@{$c->{fields}->{eprint}}){
-    if(grep $field->{name} eq $_, [qw/creators editors contributors/]){
+    if(grep $field->{name} eq $_, qw/creators editors contributors/){
         for my $sub (@{$field->{fields}}){
             #sort out ordervals
             if($sub->{sub_name} eq "name"){
