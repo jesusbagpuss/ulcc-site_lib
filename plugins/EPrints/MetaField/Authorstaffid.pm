@@ -26,7 +26,7 @@ sub _get_name {
     my $ds = $session->dataset("eprint");
     my $searchexp = $ds->prepare_search();
     $searchexp->add_field(
-        fields => [ $ds->field('creators_lbs_staffid') ],
+        fields => [ $ds->field('creators_staffid') ],
         value  => $value,
         match  => "EQ",
     );
@@ -35,8 +35,8 @@ sub _get_name {
 
     if ( defined $eprint ) {
         for my $creator ( @{ $eprint->get_value("creators") } ) {
-            if ( defined $creator->{lbs_staffid} ) {
-                if ( $creator->{lbs_staffid} eq $value ) {
+            if ( defined $creator->{staffid} ) {
+                if ( $creator->{staffid} eq $value ) {
                     $name =
                       EPrints::Utils::make_name_string( $creator->{name} );
                 }
