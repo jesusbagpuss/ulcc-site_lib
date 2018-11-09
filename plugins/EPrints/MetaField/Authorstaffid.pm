@@ -41,7 +41,7 @@ sub _get_name {
 	    if ( defined $item->{$sub_name} ) {
 		if ( $item->{$sub_name} eq $value ) {
 		    #NB : this assumes that the aprent compound has a sub field called "name"
-		    $name = EPrints::Utils::make_name_string( $item->{name} );
+		    $name = EPrints::Utils::make_name_string( $item->{name} ) if(ref($item->{name}) eq "HASH");
 		}
 	    }
 	}
