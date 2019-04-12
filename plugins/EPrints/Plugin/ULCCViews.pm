@@ -107,7 +107,7 @@ sub render_menu
 		my $xhtml_value;
 		for my $field (@{$fields}){
 			$xhtml_value = $field->get_value_label( $repo, $value );
-			last if(EPrints::XML::to_string($xhtml_value) ne $value);
+			last if(defined $value && EPrints::XML::to_string($xhtml_value) ne $value);
 		}
 		###################################################################
 
@@ -279,7 +279,7 @@ sub update_view_list
 				for my $field (@{$menu_fields}){
 					my $v = $field->render_single_value( $repo, $value);
 					$o{"value".($i+1)} = $v;
- 					last if(EPrints::XML::to_string($v) ne $value);
+ 					last if(defined $value && EPrints::XML::to_string($v) ne $value);
 				}
 				###########################################################################
 
