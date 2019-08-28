@@ -65,6 +65,11 @@ sub render_single_value {
     my ( $self, $session, $value ) = @_;
     return $self->get_value_label( $session, $value );
 }
+#subfields tend to return an epty string rather than NULL 
+sub get_value_from_id{
+    my( $self, $session, $id ) = @_;
+    return $id eq "" ? undef : $id;
+}
 
 1;
 
